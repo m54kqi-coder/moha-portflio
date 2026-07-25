@@ -1,10 +1,16 @@
 {
   "items": [
     {
+      "category": "branding",
+      "image": "images/uploads/photo_2026-07-15_09-53-19.jpg",
+      "name": "هويات بصرية",
+      "cat": "."
+    },
+    {
       "name": "ثمبنيلات يوتيوب",
-      "cat": "ثمبنيل",
+      "cat": ".",
       "category": "thumbnails",
-      "image": "images/uploads/مشروع-جديد-29-1ae7984-.png"
+      "image": "images/uploads/مشروع-جديد-123-caa0b6d-.png"
     }
   ]
 }
