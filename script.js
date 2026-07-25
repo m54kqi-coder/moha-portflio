@@ -14,7 +14,7 @@ navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
   burger.classList.remove('open');
 }));
 
-// ===== Reveal on Scroll (يُطبق أيضاً على العناصر المُولّدة لاحقاً) =====
+// ===== Reveal on Scroll =====
 const io = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
 }, { threshold: 0.1 });
@@ -23,7 +23,7 @@ function observeReveal(root = document) {
 }
 observeReveal();
 
-// أسماء الفلاتر بالعربي لكل تصنيف (fallback لو التصنيف جديد يعرض نفسه كما هو)
+// أسماء التصنيفات بالعربي (fallback لو التصنيف جديد يعرض اسمه كما هو)
 const CATEGORY_LABELS = {
   thumbnails: 'ثمبنيلات',
   branding: 'هويات بصرية',
@@ -31,94 +31,147 @@ const CATEGORY_LABELS = {
   ads: 'إعلانات',
   cv: 'سير ذاتية'
 };
-const FALLBACK_ART_CLASSES = ['art1','art2','art3','art4','art5','art6'];
+const CATEGORY_ORDER = ['thumbnails', 'branding', 'cards', 'ads', 'cv'];
+const FALLBACK_ART_CLASSES = ['art1', 'art2', 'art3', 'art4', 'art5', 'art6'];
 
-// ===== تحميل الصور من data/photos.json وبناء الشبكة + الفلاتر تلقائياً =====
+// ===== أداة بناء عنصر أكورديون واحد (تُستخدم للصور والفيديوهات) =====
+function createAccordionItem({ headerLeftHTML, contentEl, exclusiveGroup }) {
+  const wrap = document.createElement('div');
+  wrap.className = 'cat-acc';
+
+  const header = document.createElement('button');
+  header.className = 'cat-header';
+  header.setAttribute('aria-expanded', 'false');
+  header.innerHTML = `
+    <span class="cat-header-left">${headerLeftHTML}</span>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  `;
+
+  const panel = document.createElement('div');
+  panel.className = 'acc-panel';
+  const inner = document.createElement('div');
+  inner.className = 'acc-inner';
+  const innerPad = document.createElement('div');
+  innerPad.className = 'acc-inner-pad';
+  innerPad.appendChild(contentEl);
+  inner.appendChild(innerPad);
+  panel.appendChild(inner);
+
+  header.addEventListener('click', () => {
+    const isOpen = panel.classList.contains('open');
+    if (exclusiveGroup) {
+      exclusiveGroup.forEach(item => {
+        if (item.header !== header) {
+          item.header.classList.remove('open');
+          item.panel.classList.remove('open');
+          item.header.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+    header.classList.toggle('open', !isOpen);
+    panel.classList.toggle('open', !isOpen);
+    header.setAttribute('aria-expanded', String(!isOpen));
+  });
+
+  wrap.append(header, panel);
+  if (exclusiveGroup) exclusiveGroup.push({ header, panel });
+  return wrap;
+}
+
+// ===== تحميل الصور وبناء أكورديون التصنيفات =====
 async function loadPhotos() {
-  const grid = document.getElementById('photoGrid');
-  const filterBar = document.getElementById('filterBar');
-  if (!grid) return;
+  const root = document.getElementById('photoAccordion');
+  if (!root) return;
   try {
     const res = await fetch('data/photos.json', { cache: 'no-store' });
     const data = await res.json();
     const items = data.items || [];
 
-    // بناء أزرار الفلتر تلقائياً من التصنيفات الموجودة فعلياً بالبيانات
-    const categories = [...new Set(items.map(i => i.category).filter(Boolean))];
-    categories.forEach(cat => {
-      const btn = document.createElement('button');
-      btn.className = 'filter-chip';
-      btn.dataset.filter = cat;
-      btn.textContent = CATEGORY_LABELS[cat] || cat;
-      filterBar.appendChild(btn);
+    if (items.length === 0) {
+      root.innerHTML = '<div class="empty-msg">لا توجد أعمال مضافة بعد.</div>';
+      return;
+    }
+
+    // تجميع الأعمال حسب التصنيف
+    const grouped = {};
+    items.forEach(item => {
+      const cat = item.category || 'أخرى';
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat].push(item);
     });
 
-    // بناء بطاقات الصور
-    items.forEach((item, idx) => {
-      const card = document.createElement('div');
-      card.className = 'p-card reveal';
-      card.dataset.category = item.category || '';
+    // ترتيب التصنيفات: المعروفة أولاً بترتيب ثابت، ثم أي تصنيف جديد بعدها
+    const knownPresent = CATEGORY_ORDER.filter(c => grouped[c] && grouped[c].length);
+    const others = Object.keys(grouped).filter(c => !CATEGORY_ORDER.includes(c));
+    const finalOrder = [...knownPresent, ...others];
 
-      const art = document.createElement('div');
-      if (item.image) {
-        art.className = 'art';
-        art.style.backgroundImage = `url('${item.image}')`;
-        art.style.backgroundSize = 'cover';
-        art.style.backgroundPosition = 'center';
-      } else {
-        art.className = 'art ' + FALLBACK_ART_CLASSES[idx % FALLBACK_ART_CLASSES.length];
-      }
+    const exclusiveGroup = [];
+    finalOrder.forEach(cat => {
+      const catItems = grouped[cat];
+      const grid = document.createElement('div');
+      grid.className = 'photo-grid';
 
-      const fade = document.createElement('div');
-      fade.className = 'fade';
+      catItems.forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = 'p-card';
 
-      const info = document.createElement('div');
-      info.className = 'info';
-      info.innerHTML = `
-        <div class="num">${String(idx + 1).padStart(2, '0').replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d])}</div>
-        <div class="name">${item.name || ''}</div>
-        <div class="cat">${item.cat || ''}</div>
-      `;
+        const art = document.createElement('div');
+        if (item.image) {
+          art.className = 'art';
+          art.style.backgroundImage = `url('${item.image}')`;
+        } else {
+          art.className = 'art ' + FALLBACK_ART_CLASSES[idx % FALLBACK_ART_CLASSES.length];
+        }
 
-      card.append(art, fade, info);
-      grid.appendChild(card);
+        const fade = document.createElement('div');
+        fade.className = 'fade';
+
+        const info = document.createElement('div');
+        info.className = 'info';
+        info.innerHTML = `
+          <div class="name">${item.name || ''}</div>
+          <div class="cat">${item.cat || ''}</div>
+        `;
+
+        card.append(art, fade, info);
+        grid.appendChild(card);
+      });
+
+      const accItem = createAccordionItem({
+        headerLeftHTML: `<span class="cat-name">${CATEGORY_LABELS[cat] || cat}</span><span class="cat-count">${catItems.length}</span>`,
+        contentEl: grid,
+        exclusiveGroup
+      });
+      root.appendChild(accItem);
     });
 
     observeReveal();
-    initFilters();
   } catch (err) {
     console.error('تعذر تحميل بيانات الصور:', err);
   }
 }
 
-// ===== تفعيل الفلاتر (تشتغل على أي بطاقات حالياً بالصفحة) =====
-function initFilters() {
-  const filterChips = document.querySelectorAll('.filter-chip');
-  const photoCards = document.querySelectorAll('.photo-grid .p-card');
-  filterChips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      filterChips.forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      const filter = chip.dataset.filter;
-      photoCards.forEach(card => {
-        card.classList.toggle('filtered-out', filter !== 'all' && card.dataset.category !== filter);
-      });
-    });
-  });
-}
-
-// ===== تحميل الفيديوهات من data/videos.json وبناء الشبكة + التحكم المخصص =====
+// ===== تحميل الفيديوهات وبناء أكورديون واحد يحتوي كل المقاطع =====
 async function loadVideos() {
-  const grid = document.getElementById('reelGrid');
-  if (!grid) return;
+  const root = document.getElementById('videoAccordion');
+  if (!root) return;
   try {
     const res = await fetch('data/videos.json', { cache: 'no-store' });
     const data = await res.json();
     const items = data.items || [];
 
+    if (items.length === 0) {
+      root.innerHTML = '<div class="empty-msg">لا توجد مقاطع مضافة بعد.</div>';
+      return;
+    }
+
+    const grid = document.createElement('div');
+    grid.className = 'reel-grid';
+    const allVideos = [];
+
     items.forEach(item => {
       const card = document.createElement('div');
-      card.className = 'r-card reveal';
+      card.className = 'r-card';
 
       const video = document.createElement('video');
       video.className = 'custom-video';
@@ -143,45 +196,59 @@ async function loadVideos() {
 
       card.append(video, overlay, meta);
       grid.appendChild(card);
+      allVideos.push({ card, video, overlay });
     });
 
+    const accItem = createAccordionItem({
+      headerLeftHTML: `<span class="cat-name">عرض جميع الفيديوهات</span><span class="cat-count">${items.length}</span>`,
+      contentEl: grid
+    });
+    root.appendChild(accItem);
+
+    initVideoControls(allVideos);
     observeReveal();
-    initVideoControls();
   } catch (err) {
     console.error('تعذر تحميل بيانات الفيديوهات:', err);
   }
 }
 
-// ===== أزرار تشغيل/إيقاف الفيديو المخصصة =====
-function initVideoControls() {
-  document.querySelectorAll('.r-card').forEach(card => {
-    const video = card.querySelector('video');
-    const playBtn = card.querySelector('.play-btn-overlay');
-    const iconPlay = card.querySelector('.icon-play');
-    const iconPause = card.querySelector('.icon-pause');
-    if (!video || !playBtn) return;
+// ===== أزرار تشغيل/إيقاف الفيديو + منع تشغيل أكثر من مقطع بنفس الوقت =====
+function initVideoControls(allVideos) {
+  function resetCard({ card, video, overlay }) {
+    const iconPlay = overlay.querySelector('.icon-play');
+    const iconPause = overlay.querySelector('.icon-pause');
+    iconPlay.style.display = 'block';
+    iconPause.style.display = 'none';
+    overlay.classList.remove('is-playing');
+    card.classList.remove('is-playing');
+  }
 
-    playBtn.addEventListener('click', () => {
+  allVideos.forEach(entry => {
+    const { card, video, overlay } = entry;
+    const iconPlay = overlay.querySelector('.icon-play');
+    const iconPause = overlay.querySelector('.icon-pause');
+
+    overlay.addEventListener('click', () => {
       if (video.paused) {
+        // أوقف كل المقاطع الثانية قبل تشغيل هذا (يشتغل مقطع واحد فقط بنفس الوقت)
+        allVideos.forEach(other => {
+          if (other.video !== video && !other.video.paused) {
+            other.video.pause();
+            resetCard(other);
+          }
+        });
         video.play();
         iconPlay.style.display = 'none';
         iconPause.style.display = 'block';
-        playBtn.classList.add('is-playing');
+        overlay.classList.add('is-playing');
         card.classList.add('is-playing');
       } else {
         video.pause();
-        iconPlay.style.display = 'block';
-        iconPause.style.display = 'none';
-        playBtn.classList.remove('is-playing');
-        card.classList.remove('is-playing');
+        resetCard(entry);
       }
     });
-    video.addEventListener('ended', () => {
-      iconPlay.style.display = 'block';
-      iconPause.style.display = 'none';
-      playBtn.classList.remove('is-playing');
-      card.classList.remove('is-playing');
-    });
+
+    video.addEventListener('ended', () => resetCard(entry));
   });
 }
 
