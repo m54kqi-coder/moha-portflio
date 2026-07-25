@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#120F16">
+<title>محمد — مصمم صور ومونتاج فيديو</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- ربط ملف التصميم CSS -->
+<link rel="stylesheet" href="style.css">
+
+<!-- كود تتبع Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=YOUR-TRACKING-ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'YOUR-TRACKING-ID');
+</script>
+</head>
+<body>
+
+<!-- شاشة الدخول المميزة -->
+<div id="intro-screen">
+  <div class="logo-intro"><span>محمد</span> للتصميم والمونتاج</div>
+</div>
+
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+
+<header id="siteHeader">
+  <nav class="wrap">
+    <div class="logo" id="logoSlot"><span>محمد</span><!-- لوضع لوقو كصورة بدل النص: <img src="logo.png" alt="اللوقو" style="height:32px;"> --></div>
+    <ul class="nav-links">
+      <li><a href="#photo">أعمالي</a></li>
+      <li><a href="#video">المونتاج</a></li>
+      <li><a href="#about">نبذة عني</a></li>
+      <li><a href="#testimonials">آراء العملاء</a></li>
+      <li><a href="#contact">تواصل</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">ابدأ مشروعك</a>
+    <button class="burger" id="burger" aria-label="فتح القائمة"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-glow2"></div>
+    <div class="wrap">
+      <div class="eyebrow">تصميم صور · مونتاج فيديو
+        <span class="emoji-float sec-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 11L12 4L20 11" stroke="#00D9FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 9.5V20H18V9.5" stroke="#00D9FF" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 20V14.5H14V20" stroke="#FF2D6F" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
+      </div>
+      <h1 class="glitch">مرحبًا، أنا محمد <span class="emoji-wave">👋</span></h1>
+      <p class="hero-sub">أصمم هويات وصور سوشيال ميديا، وأتولى مونتاج فيديوهات اليوتيوب والريلز باحترافية — من الفكرة إلى النسخة الجاهزة للنشر.</p>
+      <div class="hero-actions">
+        <a href="#video" class="btn btn-primary">شاهد المونتاج</a>
+        <a href="#photo" class="btn btn-ghost">تصفح الصور</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b>+40</b><span>مشروع منجز</span></div>
+        <div class="stat"><b>3</b><span>سنوات خبرة</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHOTO SECTION -->
+  <section id="photo">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <div class="eyebrow">تصميم الصور
+            <span class="emoji-float sec-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="15" rx="2.5" stroke="#00D9FF" stroke-width="1.8"/><circle cx="8.5" cy="9.5" r="1.6" stroke="#00D9FF" stroke-width="1.8"/><path d="M3 16.5L8 12.5C8.6 12 9.4 12 10 12.5L13.5 15.3" stroke="#00D9FF" stroke-width="1.8" stroke-linecap="round"/><path d="M12 19L16.8 14.6C17.4 14 18.3 14 18.9 14.5L21 16.3" stroke="#FF2D6F" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          </div>
+          <h2>أعمال مختارة من تصميم الصور</h2>
+        </div>
+        <p>مجموعة من تصاميم السوشيال ميديا والصور العامة.</p>
+      </div>
+
+      <div class="filter-bar reveal" id="filterBar">
+        <button class="filter-chip active" data-filter="all">الكل</button>
+      </div>
+
+      <div class="photo-grid" id="photoGrid">
+        <!-- تُملأ تلقائياً من data/photos.json -->
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDEO SECTION -->
+  <section id="video">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <div class="eyebrow">المونتاج والمؤثرات
+            <span class="emoji-float sec-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="14" height="12" rx="2.2" stroke="#00D9FF" stroke-width="1.8"/><path d="M17 10.5L21 8V16L17 13.5" stroke="#FF2D6F" stroke-width="1.8" stroke-linejoin="round"/><path d="M6.5 7L8.5 4M11 7L13 4" stroke="#00D9FF" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          </div>
+          <h2>مونتاج يراعي الإيقاع والسرد البصري</h2>
+        </div>
+        <p>نماذج من أعمال المونتاج: إعلانات، ريلز، وأفلام قصيرة — بدءًا من القص وحتى التصحيح اللوني والصوت.</p>
+      </div>
+      <div class="reel-grid" id="reelGrid">
+        <!-- تُملأ تلقائياً من data/videos.json -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <div class="eyebrow">نبذة عني
+            <span class="emoji-float sec-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="#00D9FF" stroke-width="1.8"/><path d="M4.5 20C5.3 16 8.3 14 12 14C15.7 14 18.7 16 19.5 20" stroke="#00D9FF" stroke-width="1.8" stroke-linecap="round"/><path d="M16.5 6.5L18 8L20.5 5.2" stroke="#FF2D6F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+          <h2>الأداة تخدم الفكرة، لا العكس</h2>
+        </div>
+      </div>
+      <div class="about-grid reveal">
+        <div>
+          <p>أعمل على تصميم الصور ومونتاج الفيديو وفق منهجية تجمع بين الدقة الفنية والفهم العميق لأهداف كل مشروع. أُصمّم الصور بما يخدم هوية العلامة أو الفكرة، وأُنجز المونتاج بأسلوب يراعي الإيقاع والسرد البصري، بدءًا من المادة الخام وانتهاءً بالنسخة الجاهزة للنشر.</p>
+        </div>
+        <div class="skill-cats">
+          <div class="skill-cat">
+            <div class="cat-title">البرامج المستخدمة</div>
+            <div class="skill-tags"><span>Illustrator</span><span>Premiere Pro</span><span>After Effects</span></div>
+          </div>
+          <div class="skill-cat">
+            <div class="cat-title">مجالات العمل</div>
+            <div class="skill-tags"><span>تصميم صور سوشيال ميديا</span><span>تصميم صور عامة</span><span>مونتاج فيديوهات يوتيوب</span><span>مونتاج ريلز</span><span>إعلانات</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <div class="eyebrow">آراء العملاء
+            <span class="emoji-float sec-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 5.5H20V15.5H13L9 19V15.5H4V5.5Z" stroke="#00D9FF" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9.5C8 8.4 8.8 8 9.4 8.4C10 8.8 9.9 9.6 9.3 9.9L8.6 10.3" stroke="#FF2D6F" stroke-width="1.6" stroke-linecap="round"/><path d="M13.5 9.5C13.5 8.4 14.3 8 14.9 8.4C15.5 8.8 15.4 9.6 14.8 9.9L14.1 10.3" stroke="#FF2D6F" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+          </div>
+          <h2>شركاء النجاح</h2>
+        </div>
+        <p>مجموعة من آراء عملاء تعاملوا مع الخدمة.</p>
+      </div>
+      <div class="testi-grid">
+        <div class="t-card reveal">
+          <div class="t-quote">”</div>
+          <p class="t-text">جودة في التصميم وسرعة في التسليم، المونتاج كان متناسق جداً مع فكرة الإعلان.</p>
+          <div class="t-name">أحمد</div>
+          <div class="t-role">إعلان تجاري</div>
+        </div>
+        <div class="t-card reveal">
+          <div class="t-quote">”</div>
+          <p class="t-text">عمل احترافي بكل التفاصيل، خصوصاً في تعديل الألوان واختيار اللقطات.</p>
+          <div class="t-name">عميل مستقل</div>
+          <div class="t-role">مونتاج ريلز</div>
+        </div>
+        <div class="t-card reveal">
+          <div class="t-quote">”</div>
+          <p class="t-text">سيتم إضافة رأي العميل هنا قريبًا.</p>
+          <div class="t-name">اسم العميل</div>
+          <div class="t-role">نوع المشروع</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="contact reveal">
+        <div class="eyebrow" style="justify-content:center;">لنعمل معًا
+          <span class="emoji-float sec-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 4L3 11L10 13.5L13 20L21 4Z" stroke="#00D9FF" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 13.5L21 4" stroke="#FF2D6F" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        </div>
+        <h2>عندك مشروع صورة أو فيديو؟ أرسله وابدأ من هنا</h2>
+        <p>رد خلال ٢٤ ساعة عادةً — وضّح نوع العمل والمدة المتاحة وسأرسل خطة عمل مبدئية.</p>
+        <div class="contact-links">
+          <a href="mailto:your-email@gmail.com" class="btn btn-primary">راسلني على البريد</a>
+          <a href="https://wa.me/966500000000" target="_blank" class="btn btn-ghost btn-whatsapp">واتساب</a>
+          <a href="https://instagram.com/your-username" target="_blank" class="btn btn-ghost btn-instagram">إنستغرام</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div>© 2026 محمد. جميع الحقوق محفوظة.</div>
+  <div class="socials">
+    <a href="https://instagram.com/your-username" target="_blank">إنستغرام</a>
+    <a href="mailto:your-email@gmail.com">إيميل</a>
+    <a href="#" target="_blank">بيهانس</a>
+  </div>
+</footer>
+
+<!-- ربط ملف البرمجة JavaScript -->
+<script src="script.js"></script>
+<!-- لوحة التحكم الخاصة بإضافة الأعمال متاحة على: /admin (اكتبها يدوياً بالمتصفح، ما فيه رابط ظاهر بالموقع للعميل) -->
+
+</body>
+</html>

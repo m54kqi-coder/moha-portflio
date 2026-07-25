@@ -1,0 +1,51 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "images/uploads"
+
+locale: "ar"
+
+collections:
+  - name: "photos"
+    label: "أعمال التصميم (صور)"
+    files:
+      - label: "قائمة تصاميم الصور"
+        name: "photos"
+        file: "data/photos.json"
+        fields:
+          - label: "الأعمال"
+            name: "items"
+            widget: "list"
+            summary: "{{name}} — {{cat}}"
+            fields:
+              - { label: "اسم العمل", name: "name", widget: "string" }
+              - { label: "وصف قصير (يظهر تحت الاسم)", name: "cat", widget: "string" }
+              - label: "التصنيف (للفلترة)"
+                name: "category"
+                widget: "select"
+                options:
+                  - { label: "ثمبنيلات", value: "thumbnails" }
+                  - { label: "هويات بصرية", value: "branding" }
+                  - { label: "بطاقات أعمال", value: "cards" }
+                  - { label: "إعلانات", value: "ads" }
+                  - { label: "سير ذاتية", value: "cv" }
+              - { label: "صورة العمل", name: "image", widget: "image", required: false, hint: "ارفع صورة العمل هنا (اختياري — إذا تُركت فاضية بتظهر خلفية لونية بديلة)" }
+
+  - name: "videos"
+    label: "أعمال المونتاج (فيديوهات)"
+    files:
+      - label: "قائمة فيديوهات المونتاج"
+        name: "videos"
+        file: "data/videos.json"
+        fields:
+          - label: "الفيديوهات"
+            name: "items"
+            widget: "list"
+            summary: "{{name}} — {{duration}}"
+            fields:
+              - { label: "اسم العمل", name: "name", widget: "string" }
+              - { label: "وصف قصير (نوع العمل)", name: "tag2", widget: "string" }
+              - { label: "المدة الظاهرة (مثال: ٠:٤٥)", name: "duration", widget: "string" }
+              - { label: "ملف الفيديو", name: "video", widget: "file", required: false, hint: "ارفع ملف الفيديو (mp4). حجم الفيديوهات الكبيرة يفضل رفعه على يوتيوب/فيميو واستخدام رابط مباشر بدل الرفع المباشر." }
