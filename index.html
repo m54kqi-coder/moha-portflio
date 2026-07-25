@@ -11,7 +11,7 @@
 <!-- ربط ملف التصميم CSS -->
 <link rel="stylesheet" href="style.css">
 
-<!-- كود تتبع Google Analytics -->
+<!-- كود تتبع Google Analytics (اختياري) — بدّل YOUR-TRACKING-ID برقم حسابك، أو احذف السطرين إذا ما تستخدمه -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR-TRACKING-ID"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -21,11 +21,6 @@
 </script>
 </head>
 <body>
-
-<!-- شاشة الدخول المميزة -->
-<div id="intro-screen">
-  <div class="logo-intro"><span>محمد</span> للتصميم والمونتاج</div>
-</div>
 
 <div class="bg-orb bg-orb-1"></div>
 <div class="bg-orb bg-orb-2"></div>
@@ -77,16 +72,11 @@
           </div>
           <h2>أعمال مختارة من تصميم الصور</h2>
         </div>
-        <p>مجموعة من تصاميم السوشيال ميديا والصور العامة.</p>
+        <p>اضغط على أي تصنيف لعرض الأعمال الخاصة فيه.</p>
       </div>
 
-      <div class="filter-bar reveal" id="filterBar">
-        <button class="filter-chip active" data-filter="all">الكل</button>
-      </div>
-
-      <div class="photo-grid" id="photoGrid">
-        <!-- تُملأ تلقائياً من data/photos.json -->
-      </div>
+      <!-- تُبنى هذي القائمة تلقائياً من data/photos.json — كل تصنيف يصير قائمة منسدلة (أكورديون) فيها أعماله -->
+      <div class="cat-list" id="photoAccordion"></div>
     </div>
   </section>
 
@@ -100,11 +90,11 @@
           </div>
           <h2>مونتاج يراعي الإيقاع والسرد البصري</h2>
         </div>
-        <p>نماذج من أعمال المونتاج: إعلانات، ريلز، وأفلام قصيرة — بدءًا من القص وحتى التصحيح اللوني والصوت.</p>
+        <p>نماذج من أعمال المونتاج — بدءًا من القص وحتى التصحيح اللوني والصوت.</p>
       </div>
-      <div class="reel-grid" id="reelGrid">
-        <!-- تُملأ تلقائياً من data/videos.json -->
-      </div>
+
+      <!-- تُبنى هذي القائمة تلقائياً من data/videos.json — زر واحد يفتح كل المقاطع -->
+      <div class="cat-list" id="videoAccordion"></div>
     </div>
   </section>
 
@@ -181,9 +171,14 @@
         </div>
         <h2>عندك مشروع صورة أو فيديو؟ أرسله وابدأ من هنا</h2>
         <p>رد خلال ٢٤ ساعة عادةً — وضّح نوع العمل والمدة المتاحة وسأرسل خطة عمل مبدئية.</p>
+
+        <!-- ===== روابط التواصل — عدّل كل رابط بمعلوماتك ===== -->
         <div class="contact-links">
+          <!-- البريد الإلكتروني: بدّل your-email@gmail.com بإيميلك الحقيقي -->
           <a href="mailto:your-email@gmail.com" class="btn btn-primary">راسلني على البريد</a>
+          <!-- واتساب: بدّل 966500000000 برقمك بالصيغة الدولية (بدون + أو صفر بالبداية) -->
           <a href="https://wa.me/966500000000" target="_blank" class="btn btn-ghost btn-whatsapp">واتساب</a>
+          <!-- إنستغرام: بدّل your-username باسم حسابك -->
           <a href="https://instagram.com/your-username" target="_blank" class="btn btn-ghost btn-instagram">إنستغرام</a>
         </div>
       </div>
@@ -191,17 +186,32 @@
   </section>
 </main>
 
+<!-- ===== الفوتر — نفس روابط التواصل أعلاه + رابط بيهانس ===== -->
 <footer class="wrap">
   <div>© 2026 محمد. جميع الحقوق محفوظة.</div>
   <div class="socials">
+    <!-- إنستغرام: نفس رابط قسم التواصل أعلاه -->
     <a href="https://instagram.com/your-username" target="_blank">إنستغرام</a>
+    <!-- الإيميل: نفس رابط قسم التواصل أعلاه -->
     <a href="mailto:your-email@gmail.com">إيميل</a>
+    <!-- بيهانس: بدّل # برابط حسابك بالكامل -->
     <a href="#" target="_blank">بيهانس</a>
   </div>
 </footer>
 
 <!-- ربط ملف البرمجة JavaScript -->
 <script src="script.js"></script>
+
+<!-- Netlify Identity: يلتقط روابط الدعوة/التأكيد ويوديك مباشرة للوحة التحكم -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", () => {});
+    if (window.location.hash && window.location.hash.includes("token")) {
+      window.location.href = "/admin/" + window.location.hash;
+    }
+  }
+</script>
 <!-- لوحة التحكم الخاصة بإضافة الأعمال متاحة على: /admin (اكتبها يدوياً بالمتصفح، ما فيه رابط ظاهر بالموقع للعميل) -->
 
 </body>
